@@ -78,7 +78,7 @@ DELETE /authors/1
 A cool feature of this API is that you can access a random quote generator with the following route:
 [http://localhost:3333/quotes/random](http://localhost:3333/quotes/random)
 
-A result of that request would look like the following:
+A result(changes every time) of that request would look like the following:
 
 ```JSON
 {
@@ -92,5 +92,4 @@ A result of that request would look like the following:
     "lastName": "Drucker",
     "photoUrl": "https://www.thefamouspeople.com/profiles/images/peter-drucker-6.jpg"
   }
-}
 ```
