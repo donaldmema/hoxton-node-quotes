@@ -1,204 +1,230 @@
 import express from "express";
+import cors from "cors";
+import { Author, authorsData, Quote, quotesData } from "./data";
 
-const quotes = [
-  {
-    id: 1,
-    text: "Life is like a box of chocolates, you never know what you are going to get.",
-    author: {
-      age: 37,
-      firstName: "Forrest",
-      lastName: "Gump",
-      photoUrl:
-        "https://www.denofgeek.com/wp-content/uploads/2022/05/Tom-Hanks-as-Forrest-Gump.jpeg?fit=1200%2C714",
-    },
-  },
-  {
-    id: 2,
-    text: "We are what we repeatedly do. Excellence, then, is not an act, but a habit.",
-    author: {
-      age: 37,
-      firstName: "Aristotle",
-      lastName: "",
-      photoUrl:
-        "https://i0.wp.com/literariness.org/wp-content/uploads/2019/04/84469b33a7827daa536dd0056749f83e.jpg?fit=564%2C656&ssl=1",
-    },
-  },
-  {
-    id: 3,
-    text: "Life is 10% what happens to me and 90% of how I react to it.",
-    author: {
-      age: 87,
-      firstName: "Charles",
-      lastName: "Swindoll",
-      photoUrl:
-        "https://content.swncdn.com/zcast/oneplace/host-images/insight-for-living/640x480.jpg?v=190710-030",
-    },
-  },
-  {
-    id: 4,
-    text: "The most common way people give up their power is by thinking they don’t have any.",
-    author: {
-      age: 78,
-      firstName: "Alice",
-      lastName: "Walker",
-      photoUrl:
-        "https://celebsinfos.com/wp-content/uploads/2022/04/18walker-superJumbo.jpg",
-    },
-  },
-  {
-    id: 5,
-    text: "The most difficult thing is the decision to act, the rest is merely tenacity.",
-    author: {
-      age: 41,
-      firstName: "Amelia",
-      lastName: "Earhart",
-      photoUrl:
-        "https://www.timeforkids.com/wp-content/uploads/2020/09/AG_amelia.jpg",
-    },
-  },
-  {
-    id: 6,
-    text: "The will to win, the desire to succeed, the urge to reach your full potential... these are the keys that will unlock the door to personal excellence.",
-    author: {
-      age: 71,
-      firstName: "Confucius",
-      lastName: "",
-      photoUrl:
-        "https://cdn.britannica.com/10/184710-050-D6503292/Confucius-Shanghai-China.jpg",
-    },
-  },
-  {
-    id: 7,
-    text: "Don’t watch the clock; do what it does. Keep going.",
-    author: {
-      age: 68,
-      firstName: "Sam",
-      lastName: "Levenson",
-      photoUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/b/b5/Samlevenson.jpg",
-    },
-  },
-  {
-    id: 8,
-    text: "The only way to do great work is to love what you do.",
-    author: {
-      age: 56,
-      firstName: "Steve",
-      lastName: "Jobs",
-      photoUrl:
-        "https://image.cnbcfm.com/api/v1/image/104300870-steve_jobs.jpg?v=1532563905",
-    },
-  },
-  {
-    id: 9,
-    text: "If you can dream it, you can do it.",
-    author: {
-      age: 64,
-      firstName: "Walt",
-      lastName: "Disney",
-      photoUrl:
-        "https://www.history.com/.image/ar_16:9%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTU3ODc4NjgwMjg5ODEzODMz/list-disney-158937223-2.jpg",
-    },
-  },
-  {
-    id: 10,
-    text: "The power of imagination makes us infinite.",
-    author: {
-      age: 76,
-      firstName: "John",
-      lastName: "Muir",
-      photoUrl:
-        "https://i.guim.co.uk/img/media/a0fa94ab6a6045640b61e47f55f9f15ce5eee9f8/0_41_2384_1430/master/2384.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=95c76a4a4d7034a22bc78cb5837d9d9f",
-    },
-  },
-  {
-    id: 11,
-    text: "The best way to predict the future is to create it.",
-    author: {
-      age: 95,
-      firstName: "Peter",
-      lastName: "Drucker",
-      photoUrl:
-        "https://www.thefamouspeople.com/profiles/images/peter-drucker-6.jpg",
-    },
-  },
-  {
-    id: 12,
-    text: "Does wisdom perhaps appear on the earth as a raven which is inspired by the smell of carrion?",
-    author: {
-      age: 55,
-      firstName: "Friedrich",
-      lastName: "Nietzsche",
-      photoUrl:
-        "https://www.biography.com/.image/t_share/MTg1MDczODI2MTM1MDI0OTIx/gettyimages-515350818jpg-.jpg",
-    },
-  },
-  {
-    id: 13,
-    text: "If there is no struggle, there is no progress.",
-    author: {
-      age: 77,
-      firstName: "Frederick",
-      lastName: "Douglass",
-      photoUrl:
-        "https://thehoovercardinal.org/wp-content/uploads/2018/02/Frederick-Douglas-reddit.com-colorized-history-1-736x900.jpg",
-    },
-  },
-  {
-    id: 14,
-    text: "Blessed is the man who expects nothing, for he shall never be disappointed.",
-    author: {
-      age: 56,
-      firstName: "Alexander",
-      lastName: "Pope",
-      photoUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/5/5d/Alexander_Pope_by_Michael_Dahl.jpg",
-    },
-  },
-  {
-    id: 15,
-    text: "Laughter is not at all a bad beginning for a friendship, and it is far the best ending for one.",
-    author: {
-      age: 46,
-      firstName: "Oscar",
-      lastName: "Wilde",
-      photoUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Oscar_Wilde_3g07095u-adjust.jpg/1200px-Oscar_Wilde_3g07095u-adjust.jpg",
-    },
-  },
-  {
-    id: 16,
-    text: "We should all be thankful for those people who rekindle the inner spirit.",
-    author: {
-      age: 90,
-      firstName: "Albert",
-      lastName: "Schweitzer",
-      photoUrl:
-        "https://www.nobelprize.org/images/schweitzer-13086-portrait-medium.jpg",
-    },
-  },
-];
-
-function get_random(listEl: any[]) {
-  return listEl[Math.floor(Math.random() * listEl.length)];
-}
+let quotes = quotesData;
+let authors = authorsData;
 
 const app = express();
 const port = 3333;
 
-const cors = require("cors");
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(express.json());
+app.use(cors());
 
-app.get("/quotes", (req, res) => {
-  res.send(quotes);
-});
+function getRandom(listEl: any[]) {
+  return listEl[Math.floor(Math.random() * listEl.length)];
+}
+
+function findQuoteAuthor(quote: Quote) {
+  let author = authors.find((author) => author.id === quote.authorId);
+  return author;
+}
+
+function findAuthorQuotes(authorId: number) {
+  return quotes.filter((quote) => quote.authorId === authorId);
+}
 
 app.get("/quotes/random", (req, res) => {
-  res.send(get_random(quotes));
+  let randomQuote: Quote = getRandom(quotes);
+  let randomQuoteAuthor = findQuoteAuthor(randomQuote);
+
+  let finalQuote = { ...randomQuote, author: randomQuoteAuthor };
+  res.send(finalQuote);
+});
+
+app.get("/quotes", (req, res) => {
+  let quotesToSend = quotes;
+
+  if (req.query.includeAuthor === "true") {
+    quotesToSend = quotes.map((quote) => {
+      let author = findQuoteAuthor(quote);
+      return { ...quote, author };
+    });
+    res.send(quotesToSend);
+  } else res.send(quotesToSend);
+});
+
+app.get("/quotes/:id", (req, res) => {
+  let quote = quotes.find((quote) => quote.id === Number(req.params.id));
+  if (!quote) res.status(404).send({ error: "Quote not found!" });
+  else {
+    let author = findQuoteAuthor(quote);
+    let finalQuote = { ...quote, author };
+    res.send(finalQuote);
+  }
+});
+
+app.post("/quotes", (req, res) => {
+  let errors: string[] = [];
+
+  if (!req.body.text) errors.push("Text is required!");
+  if (typeof req.body.text !== "string") errors.push("Text must be a string!");
+
+  let quoteText = req.body.text;
+  let match = quotes.find((quote) => quote.text === quoteText);
+  if (match) errors.push("Quote already exists!");
+
+  if (!req.body.authorId) errors.push("Author ID is required!");
+  if (typeof req.body.authorId !== "number")
+    errors.push("Author ID must be a number!");
+
+  let authorId = req.body.authorId;
+  let author = authors.find((author) => author.id === authorId);
+  if (!author) errors.push(`Author with id:${authorId} not found!`);
+
+  if (errors.length > 0) res.status(400).send({ errors });
+  else {
+    let newQuote: Quote = {
+      id: quotes.length === 0 ? 1 : quotes[quotes.length - 1].id + 1,
+      text: req.body.text,
+      authorId: req.body.authorId,
+    };
+    quotes.push(newQuote);
+    res.send(newQuote);
+  }
+});
+
+app.patch("/quotes/:id", (req, res) => {
+  let id = Number(req.params.id);
+  let quoteMatch = quotes.find((quote) => quote.id === id);
+  if (!quoteMatch) res.status(404).send({ error: "Quote not found!" });
+  else {
+    let errors: string[] = [];
+
+    if (req.body.text) {
+      if (typeof req.body.text !== "string")
+        errors.push("Text must be a string!");
+      else quoteMatch.text = req.body.text;
+    }
+
+    if (req.body.authorId) {
+      if (typeof req.body.authorId !== "number")
+        errors.push("Author ID must be a number!");
+      if (!authors.find((author) => author.id === req.body.authorId))
+        errors.push(`Author with id:${req.body.authorId} not found!`);
+      if (errors.length > 0) res.status(400).send({ errors });
+      else quoteMatch.authorId = req.body.authorId;
+    }
+  }
+
+  res.send(quoteMatch);
+});
+
+app.delete("/quotes/:id", (req, res) => {
+  let id = Number(req.params.id);
+  let quoteIndex = quotes.findIndex((quote) => quote.id === id);
+
+  if (quoteIndex > -1) {
+    quotes = quotes.filter((quote) => quote.id !== id);
+    res.send({ message: "Quote deleted!" });
+  } else res.status(404).send({ error: "Quote not found!" });
+});
+
+app.get("/authors", (req, res) => {
+  let authorsToSend = authors;
+
+  if (req.query.includeQuotes === "true") {
+    authorsToSend = authors.map((author) => {
+      let authorQuotes = findAuthorQuotes(author.id);
+      return { ...author, quotes: authorQuotes };
+    });
+    res.send(authorsToSend);
+  } else res.send(authorsToSend);
+});
+
+app.get("/authors/:id", (req, res) => {
+  let author = authors.find((author) => author.id === Number(req.params.id));
+  if (!author) res.status(404).send({ error: "Author not found!" });
+  else {
+    let authorQuotes = findAuthorQuotes(author.id);
+    let finalAuthor = { ...author, quotes: authorQuotes };
+    res.send(finalAuthor);
+  }
+});
+
+app.post("/authors", (req, res) => {
+  let errors: string[] = [];
+
+  if (!req.body.age) errors.push("Age is required!");
+  if (typeof req.body.age !== "number") errors.push("Age must be a number!");
+
+  if (!req.body.firstName) errors.push("Name is required!");
+  if (typeof req.body.firstName !== "string")
+    errors.push("Name must be a string!");
+
+  if (!req.body.lastName) errors.push("Surname is required!");
+  if (typeof req.body.lastName !== "string")
+    errors.push("Surname must be a string!");
+
+  if (!req.body.photoUrl) errors.push("Photo URL is required!");
+  if (typeof req.body.photoUrl !== "string")
+    errors.push("Photo URL must be a string!");
+
+  let authorFirstName = req.body.firstName;
+  let authorLastName = req.body.lastName;
+  let match = authors.find(
+    (author) =>
+      author.firstName === authorFirstName && author.lastName === authorLastName
+  );
+  if (match) errors.push("Author already exists!");
+
+  if (errors.length > 0) res.status(400).send({ errors });
+  else {
+    let newAuthor: Author = {
+      id: authors.length === 0 ? 1 : authors[authors.length - 1].id + 1,
+      age: req.body.age,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      photoUrl: req.body.photoUrl,
+    };
+    authors.push(newAuthor);
+    res.send(newAuthor);
+  }
+});
+
+app.patch("/authors/:id", (req, res) => {
+  let id = Number(req.params.id);
+  let authorMatch = authors.find((author) => author.id === id);
+  if (!authorMatch) res.status(404).send({ error: "Author not found!" });
+  else {
+    let errors: string[] = [];
+
+    if (req.body.age) {
+      if (typeof req.body.age !== "number")
+        errors.push("Age must be a number!");
+      else authorMatch.age = req.body.age;
+    }
+
+    if (req.body.firstName) {
+      if (typeof req.body.firstName !== "string")
+        errors.push("Name must be a string!");
+      else authorMatch.firstName = req.body.firstName;
+    }
+
+    if (req.body.lastName) {
+      if (typeof req.body.lastName !== "string")
+        errors.push("Surname must be a string!");
+      else authorMatch.lastName = req.body.lastName;
+    }
+    if (req.body.photoUrl) {
+      if (typeof req.body.photoUrl !== "string")
+        errors.push("Photo URL must be a string!");
+      else authorMatch.photoUrl = req.body.photoUrl;
+    }
+    if (errors.length > 0) res.status(400).send({ errors });
+    else res.send(authorMatch);
+  }
+});
+
+app.delete("/authors/:id", (req, res) => {
+  let id = Number(req.params.id);
+  let authorIndex = authors.findIndex((author) => author.id === id);
+
+  if (authorIndex > -1) {
+    authors = authors.filter((author) => author.id !== id);
+    res.send({ message: "Author deleted!" });
+  } else res.status(404).send({ error: "Author not found!" });
+
 });
 
 app.listen(port, () => {
